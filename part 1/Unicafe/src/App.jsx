@@ -51,7 +51,7 @@ const App = () => {
       <h1>Give Some Feedback</h1>
       <Buttons setGood={setGood} setBad={setBad} setNeutral={setNeutral}/>
       <h2>Statistics</h2>
-      <Statistics values={{good, neutral, bad}}/>
+      {(good + neutral + bad) > 0? <Statistics values={{good, neutral, bad}}/> : <h3>No feedback given</h3>}
       </>
   )
 }
