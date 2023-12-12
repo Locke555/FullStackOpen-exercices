@@ -24,12 +24,18 @@ const Buttons = ({setGood, setNeutral, setBad}) => {
 }
 
 const Display = ({ values }) => {
-  
+  const all = values.good + values.bad + values.neutral;
+  const average = (values.good - values.bad) / all;
+  const pPercentage = ((values.good / all) * 100) + ' %';
+
   return (
     <div>
       <p>Good {values.good}</p>
       <p>Neutral {values.neutral}</p>
       <p>Bad {values.bad}</p>
+      <p>All {all}</p>
+      <p>Average {average}</p>
+      <p>Positive {pPercentage}</p>
     </div>
   )
 }
