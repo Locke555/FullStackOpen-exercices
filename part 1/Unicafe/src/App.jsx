@@ -23,7 +23,7 @@ const Buttons = ({setGood, setNeutral, setBad}) => {
   )
 }
 
-const Display = ({ values }) => {
+const Statistics = ({ values }) => {
   const all = values.good + values.bad + values.neutral;
   const average = (values.good - values.bad) / all;
   const pPercentage = ((values.good / all) * 100) + ' %';
@@ -51,7 +51,7 @@ const App = () => {
       <h1>Give Some Feedback</h1>
       <Buttons setGood={setGood} setBad={setBad} setNeutral={setNeutral}/>
       <h2>Statistics</h2>
-      <Display values={{good, neutral, bad}}/>
+      <Statistics values={{good, neutral, bad}}/>
       </>
   )
 }
