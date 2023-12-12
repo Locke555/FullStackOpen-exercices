@@ -19,22 +19,24 @@ const Buttons = ({setGood, setNeutral, setBad}) => {
   )
 }
 
-const StatisticLine = ({text, value}) => <p>{text} {value}</p>
+const StatisticLine = ({text, value}) => <tr><th>{text} {value}</th></tr>
 
 const Statistics = ({ values }) => {
   const all = values.good + values.bad + values.neutral;
-  const average = (values.good - values.bad) / all;
-  const pPercentage = ((values.good / all) * 100) + ' %';
+  const average = ((values.good - values.bad) / all).toFixed(1);
+  const pPercentage = ((values.good / all) * 100).toFixed(1) + ' %';
 
   return (
-    <div>
+    <table>
+      <tbody>
       <StatisticLine text={"Good"} value={values.good} />
       <StatisticLine text={"Neutral"} value={values.neutral} />
       <StatisticLine text={"Bad"} value={values.bad} />
       <StatisticLine text={"All"} value={all} />
       <StatisticLine text={"Average"} value={average} />
       <StatisticLine text={"Positive"} value={pPercentage} />
-    </div>
+      </tbody>
+    </table>
   )
 }
 
