@@ -29,12 +29,31 @@ const App = () => {
     console.log(copy)
   }
 
+  const indexOfMostVoted = () => {
+    let bigger = 0;
+    let index = 0
+    for (const props in votes) {
+      if (votes[props] > bigger) {
+        bigger = votes[props];
+        index = props
+      }
+    }
+
+    return parseInt(index);
+  }
+  const mostVoted = indexOfMostVoted();
+  console.log(mostVoted)
+  
+
   return (
     <div>
+      <h1>Anecdote of the Day</h1>
       <p>{anecdotes[selected]}</p>
       <p>Has {votes[selected]} votes</p>
       <button onClick={handleSelected}>Next anecdote</button>
       <button onClick={handleVotes}>Vote</button>
+      <h2>Anecdote With Most Votes</h2>
+      <p>{anecdotes[mostVoted]}</p>
     </div>
   )
 }
