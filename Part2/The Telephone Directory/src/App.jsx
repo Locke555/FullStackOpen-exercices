@@ -10,13 +10,23 @@ const App = () => {
     console.log(e.target.value);
     setNewName((prev)=>e.target.value);
   }
+  
+  const personExist = (actualPerson) => {
+    return persons.reduce((result, person) => {
+      if (actualPerson === person.name) {
+        return true
+      }
+    }, false)
+  }
 
   const handleSubmitPersons = (e) => {
     e.preventDefault();
     console.log(e.target);
-    if (newName.length > 0) {
+    if (newName.length > 0 && !personExist(newName)) {
       setPersons((prev)=>prev.concat({name: newName}));
       setNewName("");
+    } else {
+      alert(`${newName} is alredy added to phonebook`)
     }
   }
   return (
