@@ -18,7 +18,7 @@ const App = () => {
   return(
     <>
       <SearchBar search={search} setSearch={setSearch} />
-      <Display search={search} countries={countries} />
+      <Display search={search} countries={countries} setSearch={setSearch} />
     </>
   )
 }
