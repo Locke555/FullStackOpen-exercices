@@ -3,7 +3,7 @@ import Country from "./country"
 
 const Display = ({search, setSearch, countries}) => {
     const countriesToDisplay = countries.filter((country) => country.name.common.toLowerCase().startsWith(search.toLowerCase()))
-    console.log(countriesToDisplay)
+
 
 
     return (
