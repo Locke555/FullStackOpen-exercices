@@ -6,8 +6,8 @@ import axios from 'axios'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]); 
-  const [ newName, setNewName ] = useState('');
-  const [newNumber, setNumber] = useState('');
+  const [ newName, setnewName ] = useState('');
+  const [newNumber, setnewNumber] = useState('');
   const [search, setSearch] = useState('');
 
   useEffect(()=> {
@@ -21,12 +21,12 @@ const App = () => {
 
   const handleNameChange = (e) => {
     console.log(e.target.value);
-    setNewName((prev)=>e.target.value);
+    setnewName((prev)=>e.target.value);
   }
 
   const handleNumberChange = (e) => {
     console.log(newNumber);
-    setNumber(prev=>e.target.value)
+    setnewNumber(prev=>e.target.value)
   }
   
   const personExist = (actualPerson) => {
@@ -41,9 +41,16 @@ const App = () => {
     e.preventDefault();
     console.log(e.target);
     if (newName.length > 0 && !personExist(newName)) {
-      setPersons((prev)=>prev.concat({name: newName, number: newNumber}));
-      setNewName("");
-      setNumber("");
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+      }
+      axios.post('http://localhost:3001/persons', newPerson)
+           .then(response => {
+            setPersons(prev=>prev.concat(response.data));
+            setnewName("");
+            setnewNumber("");
+           })
     } else {
       alert(`${newName} is alredy added to phonebook`)
     }
