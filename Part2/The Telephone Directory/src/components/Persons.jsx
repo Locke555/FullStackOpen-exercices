@@ -1,4 +1,6 @@
-const Persons = ({persons, search}) => {
+import Person from "./Person"
+
+const Persons = ({persons, search, setPersons}) => {
     const personsToShow = search.length === 0
     ? persons
     : persons.filter((person) => person.name.toLowerCase().startsWith(search.toLocaleLowerCase()))
@@ -6,7 +8,7 @@ const Persons = ({persons, search}) => {
 
     return (
         <ul>
-        {personsToShow.map((person) => <li key={person.name}> { person.name} {person.number} </li>)}
+        {personsToShow.map((person) => <Person key={person.id} person={person} setPersons={setPersons} />)}
       </ul>
     )
 }

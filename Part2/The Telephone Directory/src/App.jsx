@@ -66,7 +66,7 @@ const App = () => {
       <h2>Add New</h2>
         <PersonForm onSubmit={handleSubmitPersons} nameValue={newName} numberValue={newNumber} onNameChange={handleNameChange} onNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-        <Persons persons={persons} search={search}/>
+        <Persons persons={persons} search={search} setPersons={setPersons}/>
     </div>
   )
 }
