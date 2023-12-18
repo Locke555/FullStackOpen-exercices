@@ -28,16 +28,11 @@ const App = () => {
   }
   
   const personExist = (actualPerson) => {
-    return persons.reduce((result, person) => {
-      if (actualPerson === person.name) {
-        return true
-      }
-    }, false)
+    return persons.find(person=> person.name === newName) != undefined ? true : false;
   }
 
   const handleSubmitPersons = (e) => {
     e.preventDefault();
-    console.log(e.target);
     if (newName.length > 0 && !personExist(newName)) {
       const newPerson = {
         name: newName,
@@ -49,8 +44,16 @@ const App = () => {
                       setnewName("");
                       setnewNumber("");
                       console.log(response);})
-    } else {
-      alert(`${newName} is alredy added to phonebook`)
+    } else if (confirm(`${newName} is alredy added to phonebook, replace the old number with a new one?`)) {
+      const oldPerson = persons.find(person=> person.name === newName);
+      const newPerson = {...oldPerson, number: newNumber};
+      const id = newPerson.id;
+      personService.update(id, newPerson)
+                   .then(response =>{
+                    setPersons(prev=>prev.map(person => person.id != id ? person : response));
+                    setnewName("");
+                    setnewNumber("");
+                   })
     }
   }
 
