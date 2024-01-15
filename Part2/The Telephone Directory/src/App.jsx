@@ -4,12 +4,14 @@ import PersonForm from './components/PersonForm';
 import Persons from './components/persons';
 import axios from 'axios'
 import personService from './services/persons'
+import Notification from './components/Notification';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]); 
   const [ newName, setnewName ] = useState('');
   const [newNumber, setnewNumber] = useState('');
   const [search, setSearch] = useState('');
+  const [newMessage, setNewMessage] = useState(null);
 
   useEffect(()=> {
     personService.getAll()
@@ -43,7 +45,12 @@ const App = () => {
                       setPersons(prev=>prev.concat(response));
                       setnewName("");
                       setnewNumber("");
-                      console.log(response);})
+                      console.log(response);
+                      setNewMessage(`Added ${response.name}`);
+                      setTimeout(() => {
+                        setNewMessage(null);
+                      }, 5000)
+                    })
     } else if (confirm(`${newName} is alredy added to phonebook, replace the old number with a new one?`)) {
       const oldPerson = persons.find(person=> person.name === newName);
       const newPerson = {...oldPerson, number: newNumber};
@@ -51,8 +58,11 @@ const App = () => {
       personService.update(id, newPerson)
                    .then(response =>{
                     setPersons(prev=>prev.map(person => person.id != id ? person : response));
+                    setNewMessage(`Edited ${newName}`)
                     setnewName("");
                     setnewNumber("");
+                    setTimeout(()=> setNewMessage(null), 5000
+                    )
                    })
     }
   }
@@ -65,6 +75,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={newMessage} />
         <Filter value={search} onChange={handleSearchChange} />
       <h2>Add New</h2>
         <PersonForm onSubmit={handleSubmitPersons} nameValue={newName} numberValue={newNumber} onNameChange={handleNameChange} onNumberChange={handleNumberChange} />
