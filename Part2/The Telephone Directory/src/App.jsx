@@ -46,10 +46,19 @@ const App = () => {
                       setnewName("");
                       setnewNumber("");
                       console.log(response);
-                      setNewMessage(`Added ${response.name}`);
+                      setNewMessage({content: `Added ${newName}`, kind: 'success'});
                       setTimeout(() => {
                         setNewMessage(null);
                       }, 5000)
+                    })
+                    .catch(error => {
+                      setNewMessage({content: `Information of ${newName} has alredy been removed from server`})
+                      setPersons(prev => prev.filter(p => p.name !== newName))
+                      setnewName('');
+                      setnewNumber('');
+                      setTimeout(()=> setNewMessage(null), 5000
+                      )
+                      
                     })
     } else if (confirm(`${newName} is alredy added to phonebook, replace the old number with a new one?`)) {
       const oldPerson = persons.find(person=> person.name === newName);
@@ -58,12 +67,21 @@ const App = () => {
       personService.update(id, newPerson)
                    .then(response =>{
                     setPersons(prev=>prev.map(person => person.id != id ? person : response));
-                    setNewMessage(`Edited ${newName}`)
+                    setNewMessage({content: `Edited ${newName}`, kind: 'success'})
                     setnewName("");
                     setnewNumber("");
                     setTimeout(()=> setNewMessage(null), 5000
                     )
                    })
+                    .catch(error => {
+                      setNewMessage({content: `Information of ${newName} has alredy been removed from server`})
+                      setPersons(prev => prev.filter(p => p.name !== newName))
+                      setnewName('');
+                      setnewNumber('');
+                      setTimeout(()=> setNewMessage(null), 5000
+                      )
+                      
+                    })
     }
   }
 
@@ -80,7 +98,7 @@ const App = () => {
       <h2>Add New</h2>
         <PersonForm onSubmit={handleSubmitPersons} nameValue={newName} numberValue={newNumber} onNameChange={handleNameChange} onNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-        <Persons persons={persons} search={search} setPersons={setPersons}/>
+        <Persons persons={persons} search={search} setPersons={setPersons} setNewMessage={setNewMessage}/>
     </div>
   )
 }

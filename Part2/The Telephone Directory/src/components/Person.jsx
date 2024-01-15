@@ -1,6 +1,6 @@
 import personsService from "../services/persons"
 
-const Person = ({person, setPersons}) => {
+const Person = ({person, setPersons, setNewMessage}) => {
 
     const handleClick = () => {
         if (confirm(`Delete ${person.name}`)) {
@@ -8,6 +8,13 @@ const Person = ({person, setPersons}) => {
                           .then(response=>{
                             setPersons(prev=>prev.filter(oldPerson => oldPerson.id != person.id))
                           })
+                    .catch(error => {
+                      setNewMessage({content: `Information of ${person.name} has alredy been removed from server`})
+                      setPersons(prev => prev.filter(p => p.id !== person.id))
+                      setTimeout(()=> setNewMessage(null), 5000
+                      )
+                      
+                    })
         }
     }
 
