@@ -71,6 +71,10 @@ describe('total likes', () => {
     }
   ]
 
+  test('of empty list is 0', () => {
+    assert.strictEqual(listHelper.totalLikes([]), 0)
+  })
+
   test('when list has only one blog, equals the likes of that', () => {
     const result = listHelper.totalLikes(listWithOneBlog)
     assert.strictEqual(result, 5)
