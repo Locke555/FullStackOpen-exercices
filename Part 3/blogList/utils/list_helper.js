@@ -1,3 +1,5 @@
+const fp = require('lodash')
+
 // eslint-disable-next-line no-unused-vars
 const dummy = (blogs) => {
   return 1
@@ -33,10 +35,29 @@ const favoriteBlog = (blogs) => {
   return result
 }
 
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) {
+    return null
+  }
+
+  const map = fp.countBy(blogs, 'author')
+
+  const authorMoreBlogs = Object.keys(map).reduce(
+    (acc, curr) => map[curr] >= map[acc] ? curr : acc,
+    Object.keys(map)[0]
+  )
+
+  return {
+    author: authorMoreBlogs,
+    blogs: map[authorMoreBlogs]
+  }
+}
 
 
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
+
 }
