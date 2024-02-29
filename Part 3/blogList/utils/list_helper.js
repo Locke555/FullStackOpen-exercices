@@ -5,11 +5,38 @@ const dummy = (blogs) => {
 
 const totalLikes = (blogs) => {
   return blogs.reduce(
-    (acc, curr) => curr['likes'] + acc, 0
+    (acc, curr) => curr.likes + acc, 0
   )
 }
 
+const favoriteBlog = (blogs) => {
+  const favorite = blogs.reduce(
+    (acc, curr) => {
+      if (acc !== null) {
+        return acc.likes > curr.likes ? acc : curr
+      } else {
+        return curr
+      }
+    }, null
+  )
+
+  if (favorite === null) {
+    return null
+  }
+
+  const result = {
+    title: favorite.title,
+    author: favorite.author,
+    likes: favorite.likes
+  }
+
+  return result
+}
+
+
+
 module.exports = {
   dummy,
-  totalLikes
+  totalLikes,
+  favoriteBlog
 }
