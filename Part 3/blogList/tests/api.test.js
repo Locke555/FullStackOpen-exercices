@@ -84,10 +84,33 @@ test('all notes are returned as JSON', async () => {
   assert.strictEqual(response.body.length, 10)
 })
 
-test.only('the unique identifier property of the blog posts is named id', async () => {
+test('the unique identifier property of the blog posts is named id', async () => {
   const response = await api.get('/api/blogs')
 
   assert(Object.hasOwn(response.body[0], 'id'))
+})
+
+test.only('Makin a HTTP POST Request, succesfully creates a new blog post', async () => {
+  const newBlogPost = {
+    title: 'Rust is Awesome',
+    author: 'Rustecean',
+    url: 'www.rustlang.org',
+    likes: 200
+  }
+
+  const response = await api.post('/api/blogs')
+    .send(newBlogPost)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const allData = await api.get('/api/blogs')
+    .expect(200)
+
+  delete response.body.id
+
+  assert.strictEqual(allData.body.length, initialState.length + 1)
+  assert.deepStrictEqual(response.body, newBlogPost)
+
 })
 
 after(async () => {
