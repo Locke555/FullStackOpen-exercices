@@ -113,7 +113,7 @@ test('Makin a HTTP POST Request, succesfully creates a new blog post', async () 
 
 })
 
-test.only('if likes property is missing, it will be default to 0', async () => {
+test('if likes property is missing, it will be default to 0', async () => {
   const newBlogPost = {
     title: 'Rust is Awesome',
     author: 'Rustecean',
@@ -126,6 +126,17 @@ test.only('if likes property is missing, it will be default to 0', async () => {
     .expect('Content-Type', /application\/json/)
 
   assert.strictEqual(response.body.likes, 0)
+})
+
+test.only('if the title or url properties are missing, responds to the request with the status code 400', async () => {
+  let newBlogPost = {
+    author: 'Rustecean',
+    likes: 200
+  }
+
+  await api.post('/api/blogs')
+    .send(newBlogPost)
+    .expect(400)
 })
 
 after(async () => {
