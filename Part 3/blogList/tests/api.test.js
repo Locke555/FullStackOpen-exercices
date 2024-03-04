@@ -90,7 +90,7 @@ test('the unique identifier property of the blog posts is named id', async () =>
   assert(Object.hasOwn(response.body[0], 'id'))
 })
 
-test.only('Makin a HTTP POST Request, succesfully creates a new blog post', async () => {
+test('Makin a HTTP POST Request, succesfully creates a new blog post', async () => {
   const newBlogPost = {
     title: 'Rust is Awesome',
     author: 'Rustecean',
@@ -111,6 +111,21 @@ test.only('Makin a HTTP POST Request, succesfully creates a new blog post', asyn
   assert.strictEqual(allData.body.length, initialState.length + 1)
   assert.deepStrictEqual(response.body, newBlogPost)
 
+})
+
+test.only('if likes property is missing, it will be default to 0', async () => {
+  const newBlogPost = {
+    title: 'Rust is Awesome',
+    author: 'Rustecean',
+    url: 'www.rustlang.org',
+  }
+
+  const response = await api.post('/api/blogs')
+    .send(newBlogPost)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  assert.strictEqual(response.body.likes, 0)
 })
 
 after(async () => {
