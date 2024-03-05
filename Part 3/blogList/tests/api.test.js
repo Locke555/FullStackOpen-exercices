@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -154,7 +154,7 @@ test('delete succesfully a single blog', async () => {
   assert.strictEqual(allNotesBeforeDelete.body.length, allNotes.body.length - 1)
 })
 
-test.only('update succesfully a single blog', async () => {
+test('update succesfully a single blog', async () => {
   let allNotes = await api.get('/api/blogs')
     .expect(200)
 
@@ -176,6 +176,22 @@ test.only('update succesfully a single blog', async () => {
 
   assert.strictEqual(putResponse.body.id, singleNoteId)
   assert.deepStrictEqual(putResponse.body, newState.body[0])
+})
+
+describe.only('Users Test', () => {
+  test.only('create succesfully a single user', async () => {
+    let newUser = {
+      username: 'foo',
+      name: 'foo bar',
+      password: '12345'
+    }
+
+    let response = await api.post('/api/users')
+      .send(newUser)
+      .expect(201)
+
+    assert(Object.hasOwn(response.body, 'id'))
+  })
 })
 
 after(async () => {
