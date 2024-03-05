@@ -128,7 +128,7 @@ test('if likes property is missing, it will be default to 0', async () => {
   assert.strictEqual(response.body.likes, 0)
 })
 
-test.only('if the title or url properties are missing, responds to the request with the status code 400', async () => {
+test('if the title or url properties are missing, responds to the request with the status code 400', async () => {
   let newBlogPost = {
     author: 'Rustecean',
     likes: 200
@@ -137,6 +137,45 @@ test.only('if the title or url properties are missing, responds to the request w
   await api.post('/api/blogs')
     .send(newBlogPost)
     .expect(400)
+})
+
+test('delete succesfully a single blog', async () => {
+  let allNotes = await api.get('/api/blogs')
+    .expect(200)
+
+  let singleNoteId = allNotes.body[0].id
+
+  await api.delete(`/api/blogs/${singleNoteId}`)
+    .expect(204)
+
+  let allNotesBeforeDelete = await api.get('/api/blogs')
+    .expect(200)
+
+  assert.strictEqual(allNotesBeforeDelete.body.length, allNotes.body.length - 1)
+})
+
+test.only('update succesfully a single blog', async () => {
+  let allNotes = await api.get('/api/blogs')
+    .expect(200)
+
+  let singleNoteId = allNotes.body[0].id
+
+  let newNote = {
+    title: 'Exploring Mongoose Schemas',
+    author: 'John Doe',
+    url: 'www.example.com',
+    likes: 100
+  }
+
+  let putResponse = await api.put(`/api/blogs/${singleNoteId}`)
+    .send(newNote)
+    .expect(200)
+
+  let newState = await api.get('/api/blogs')
+    .expect(200)
+
+  assert.strictEqual(putResponse.body.id, singleNoteId)
+  assert.deepStrictEqual(putResponse.body, newState.body[0])
 })
 
 after(async () => {
