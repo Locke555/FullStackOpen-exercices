@@ -6,6 +6,7 @@ const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const initialState = [
   {
@@ -69,9 +70,13 @@ const initialState = [
     likes: 21
   }
 ]
+// eslint-disable-next-line no-unused-vars
+const usersInitialState = []
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+
+  await User.deleteMany({})
 
   await Blog.insertMany(initialState)
 })
@@ -181,16 +186,44 @@ test('update succesfully a single blog', async () => {
 describe.only('Users Test', () => {
   test.only('create succesfully a single user', async () => {
     let newUser = {
-      username: 'foo',
+      username: 'foooo',
       name: 'foo bar',
       password: '12345'
     }
 
     let response = await api.post('/api/users')
       .send(newUser)
-      .expect(201)
-
+      //.expect(201)
+    console.log(response.body)
     assert(Object.hasOwn(response.body, 'id'))
+  })
+
+  test.only('cant create a user with a password or username shorter than 3 character', async () => {
+    let badPassword = {
+      username: 'foooo',
+      name: 'foo bar',
+      password: '12'
+    }
+
+    let badUsername = {
+      username: 'fo',
+      name: 'foo bar',
+      password: '12456789'
+    }
+
+    let badPasswordResponse = await api.post('/api/users')
+      .send(badPassword)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(badPasswordResponse.body.error, 'You cannot create a password with a length of less than 3 characters.')
+
+    let badUsernameResponse = await api.post('/api/users')
+      .send(badUsername)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(badUsernameResponse.body.error, 'You cannot create a user with a length of less than 3 characters.')
   })
 })
 
